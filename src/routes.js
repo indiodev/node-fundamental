@@ -1,11 +1,12 @@
 import { Database } from "./database.js";
+import { buildRoutePatch } from "./utils/build-route-path.js";
 
 const database = new Database();
 
 export const ROUTES = [
   {
     method: "GET",
-    path: "/users",
+    path: buildRoutePatch("/users"),
     handler: (request, response) => {
       const users = database.select("users");
       return response
@@ -15,7 +16,7 @@ export const ROUTES = [
   },
   {
     method: "POST",
-    path: "/users",
+    path: buildRoutePatch("/users"),
     handler: (request, response) => {
       const { name, email } = request.body;
 
@@ -26,6 +27,15 @@ export const ROUTES = [
 
       database.insert("users", user);
       return response.writeHead(201).end();
+    },
+  },
+  {
+    method: "DELETE",
+    path: buildRoutePatch("/users/:id"),
+    handler: (request, response) => {
+      const { id } = request.params;
+      database.delete("users", id);
+      return response.writeHead(204).end();
     },
   },
 ];

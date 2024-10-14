@@ -11,10 +11,14 @@ const server = createServer(async function (request, response) {
   await _json(request, response);
 
   const route = ROUTES.find((route) => {
-    return route.method === method && route.path === url;
+    return route.method === method && route.path.test(url);
   });
 
   if (!route) return response.writeHead(404).end();
+
+  const routeParams = request.url.match(route.path);
+
+  request.params = { ...routeParams.groups };
 
   return route.handler(request, response);
 });
