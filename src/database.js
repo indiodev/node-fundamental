@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { readFile, writeFile } from "node:fs/promises";
 
 const path = new URL("../db.json", import.meta.url);
@@ -24,10 +25,11 @@ export class Database {
   }
 
   insert(table, data) {
+    const id = randomUUID();
     if (Array.isArray(this.#database[table])) {
-      this.#database[table].push(data);
+      this.#database[table].push({ id, ...data });
     } else {
-      this.#database[table] = [data];
+      this.#database[table] = [{ id, ...data }];
     }
 
     this.#persist();

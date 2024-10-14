@@ -1,5 +1,5 @@
 import { createServer } from "node:http";
-import { METHOD, ROUTE, USER_LIST } from "./constant.js";
+import { METHOD, ROUTE } from "./constant.js";
 import { Database } from "./database.js";
 import { _json } from "./middlewares/json.js";
 
@@ -21,7 +21,6 @@ const server = createServer(async function (request, response) {
     const { name, email } = request.body;
 
     const user = {
-      id: USER_LIST.length + 1,
       name,
       email,
     };
