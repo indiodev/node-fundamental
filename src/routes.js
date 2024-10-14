@@ -8,7 +8,16 @@ export const ROUTES = [
     method: "GET",
     path: buildRoutePatch("/users"),
     handler: (request, response) => {
-      const users = database.select("users");
+      const { search } = request.query;
+      const users = database.select(
+        "users",
+        search
+          ? {
+              name: search,
+              email: search,
+            }
+          : null
+      );
       return response
         .setHeader("Content-Type", "application/json")
         .end(JSON.stringify(users, null, 2));
