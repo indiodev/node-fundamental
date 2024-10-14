@@ -38,4 +38,19 @@ export const ROUTES = [
       return response.writeHead(204).end();
     },
   },
+
+  {
+    method: "PUT",
+    path: buildRoutePatch("/users/:id"),
+    handler: (request, response) => {
+      const { id } = request.params;
+      const { name, email } = request.body;
+      const user = {
+        name,
+        email,
+      };
+      database.update("users", id, user);
+      return response.writeHead(204).end();
+    },
+  },
 ];
