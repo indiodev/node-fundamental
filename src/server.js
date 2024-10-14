@@ -1,9 +1,7 @@
 import { createServer } from "node:http";
-import { Database } from "./database.js";
 import { _json } from "./middlewares/json.js";
 import { ROUTES } from "./routes.js";
-
-const database = new Database();
+import { extractQueryParams } from "./utils/extract-query-params.js";
 
 const server = createServer(async function (request, response) {
   const { method, url } = request;
@@ -18,7 +16,10 @@ const server = createServer(async function (request, response) {
 
   const routeParams = request.url.match(route.path);
 
-  request.params = { ...routeParams.groups };
+  const { query, ...params } = routeParams.groups;
+
+  request.params = params;
+  request.query = query ? extractQueryParams(query) : {};
 
   return route.handler(request, response);
 });

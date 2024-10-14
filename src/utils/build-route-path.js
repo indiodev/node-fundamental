@@ -1,5 +1,6 @@
 /**
- * @param {string} route
+ * @param {string} path
+ * @returns {RegExp}
  */
 export function buildRoutePatch(path) {
   const routeParametersRegex = /:([a-zA-Z]+)/g;
@@ -9,7 +10,7 @@ export function buildRoutePatch(path) {
     "(?<$1>[a-z0-9-_]+)"
   );
 
-  const pathRegex = new RegExp(`^${pathWithParameters}`);
+  const pathRegex = new RegExp(`^${pathWithParameters}(?<query>\\?(.*))?$`);
 
   return pathRegex;
 }
