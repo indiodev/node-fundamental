@@ -1,1 +1,9 @@
-{}
+{
+  "users": [
+    {
+      "id": "1e43e4e4-217a-41d1-8714-200822549d27",
+      "name": "Marcos",
+      "email": "marcos@mail.com"
+    }
+  ]
+}

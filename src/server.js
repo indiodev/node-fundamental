@@ -1,7 +1,7 @@
 import { createServer } from "node:http";
-import { METHOD, ROUTE } from "./constant.js";
 import { Database } from "./database.js";
 import { _json } from "./middlewares/json.js";
+import { ROUTES } from "./routes.js";
 
 const database = new Database();
 
@@ -10,26 +10,13 @@ const server = createServer(async function (request, response) {
 
   await _json(request, response);
 
-  if (method === METHOD.GET && url === ROUTE.USERS) {
-    const users = database.select("users");
-    return response
-      .setHeader("Content-Type", "application/json")
-      .end(JSON.stringify(users, null, 2));
-  }
+  const route = ROUTES.find((route) => {
+    return route.method === method && route.path === url;
+  });
 
-  if (method === METHOD.POST && url === ROUTE.USERS) {
-    const { name, email } = request.body;
+  if (!route) return response.writeHead(404).end();
 
-    const user = {
-      name,
-      email,
-    };
-
-    database.insert("users", user);
-    return response.writeHead(201).end();
-  }
-
-  return response.writeHead(404).end();
+  return route.handler(request, response);
 });
 
 server.listen(3333);
